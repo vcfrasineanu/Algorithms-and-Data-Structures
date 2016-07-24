@@ -27,5 +27,6 @@
 *.out
 *.app
 
-# 'bin' dir
+# Ignore 'bin' dir
 bin/
+
