@@ -94,7 +94,6 @@ void findRanks::track( int x )
     else
     {
         Vertex *root = m_root;
-
         Vertex *newVertex = new Vertex;
         newVertex->value = x;
         newVertex->rank = 0;
@@ -160,7 +159,7 @@ int main()
     cout << "Rank of 7: " << test.getRankOfNumber(7) << endl;
     cout << "Rank of 9: " << test.getRankOfNumber(9) << endl;
     cout << "Rank of 13: " << test.getRankOfNumber(13) << endl;
-    
+
     return 0;
 }
 
