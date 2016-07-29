@@ -90,6 +90,8 @@ int main()
 
     cout << endl;
 
+    delete[] v;
+    
     return 0;
 }
 
