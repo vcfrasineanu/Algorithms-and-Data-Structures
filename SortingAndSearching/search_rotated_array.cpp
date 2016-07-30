@@ -21,7 +21,7 @@ int binary_search( int* v, int left, int right, int number )
 		if ( v[left] == number ) return left;
 		if ( v[right] == number ) return right;
 
-		if ( v[mid] == left && v[mid] == right )
+		if ( v[mid] == v[left] && v[mid] == v[right] )
 		{
 			int x = binary_search( v, left, mid-1, number );
 			int y = binary_search( v, mid+1, right, number );
