@@ -31,6 +31,8 @@ public:
 
 	void printList();
 
+	Node* getRoot();
+
 private:
 	Node* root;
 };
@@ -128,10 +130,77 @@ void LinkedList::printList()
 
 // -----------------------------------------------------------------------------
 
+Node* LinkedList::getRoot()
+{
+	return root;
+}
+
+// -----------------------------------------------------------------------------
+
+/**
+ * Task: Compute sum of two linked lists
+ */
+LinkedList computeSum( LinkedList a, LinkedList b )
+{
+	LinkedList s;
+
+	Node* rootA = a.getRoot();
+	Node* rootB = b.getRoot();
+
+	int sum, mem;
+	sum = 0;
+	mem = 0;
+
+	while ( rootA != NULL && rootB != NULL )
+	{
+		sum = mem + rootA->data + rootB->data;
+		mem = sum / 10;
+		sum = sum % 10;
+
+		s.appendToTail(sum);
+
+		rootA = rootA->next;
+		rootB = rootB->next;
+	}
+
+	if ( rootA != NULL )
+	{
+		while ( rootA != NULL )
+		{
+			sum = mem + rootA->data;
+			mem = sum / 10;
+			sum = sum % 10;
+
+			s.appendToTail(sum);
+
+			rootA = rootA->next;	
+		}
+	}
+
+	if ( rootB != NULL )
+	{
+		while ( rootB != NULL )
+		{
+			sum = mem + rootB->data;
+			mem = sum / 10;
+			sum = sum % 10;
+
+			s.appendToTail(sum);
+
+			rootB = rootB->next;	
+		}
+	}
+
+	if ( mem!=0 ) s.appendToTail(mem);
+
+	return s;
+}
+
+// -----------------------------------------------------------------------------
+
 int main()
 {
 	LinkedList l;
-	Node* node = new Node;
 	
 	l.appendToTail(5);
 	l.printList();
@@ -161,6 +230,20 @@ int main()
 	l.printList();
 
 	cout << l.deleteNode(5) << endl;
+
+	LinkedList a;
+	LinkedList b;
+
+	a.appendToTail(7);
+	a.appendToTail(1);
+	a.appendToTail(6);
+
+	b.appendToTail(5);
+	b.appendToTail(9);
+	b.appendToTail(5);
+
+	LinkedList s = computeSum( a, b );
+	s.printList();
 
 	return 0;
 }
