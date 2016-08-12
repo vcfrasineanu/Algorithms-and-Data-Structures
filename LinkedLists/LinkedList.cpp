@@ -33,8 +33,11 @@ public:
 
 	Node* getRoot();
 
+	int getSize();
+
 private:
 	Node* root;
+	int size;
 };
 
 // -----------------------------------------------------------------------------
@@ -43,6 +46,7 @@ LinkedList::LinkedList()
 {
 	root = new Node;
 	root = NULL;
+	size = 0;
 }
 
 // -----------------------------------------------------------------------------
@@ -63,6 +67,7 @@ void LinkedList::appendToTail( int newData )
 	if ( root == NULL )
 	{
 		root = newNode;
+		size++;
 	}
 	else
 	{
@@ -72,6 +77,7 @@ void LinkedList::appendToTail( int newData )
 			it = it->next;
 		}
 		it->next = newNode;
+		size++;
 	}
 }
 
@@ -83,6 +89,7 @@ bool LinkedList::deleteNode( int n )
 	if ( root->data == n )
 	{
 		root = root->next;
+		size--;
 		return true;
 	}
 
@@ -97,6 +104,7 @@ bool LinkedList::deleteNode( int n )
 	{
 		if ( it->data == n )
 		{
+			size--;
 			it = NULL;
 			return true;
 		}
@@ -109,7 +117,7 @@ bool LinkedList::deleteNode( int n )
 	{
 		it->next = it->next->next;
 	}
-
+	size--;
 	return true;
 }
 
@@ -137,8 +145,16 @@ Node* LinkedList::getRoot()
 
 // -----------------------------------------------------------------------------
 
+int LinkedList::getSize()
+{
+	return size;
+}
+
+// -----------------------------------------------------------------------------
+
 /**
  * Task: Compute sum of two linked lists
+ * Ex: ( 7->1->6 ) + ( 5->9->2 ) = ( 2->1->9 ) // 617+295 = 912
  */
 LinkedList computeSum( LinkedList a, LinkedList b )
 {
@@ -196,6 +212,87 @@ LinkedList computeSum( LinkedList a, LinkedList b )
 	return s;
 }
 
+int mem;
+
+/**
+ * Task: Compute sum of two linked lists recursively
+ * Ex: ( 6->1->7 ) + ( 2->9->5 ) = ( 9->1->2 ) // 617+295 = 912
+ */
+ 
+Node* computeSum( Node* a, Node* b )
+{
+	if ( a->next == NULL && b->next == NULL )
+	{
+		Node* newNode = new Node;
+		newNode->data = (a->data + b->data) % 10;
+		mem = (a->data + b->data) / 10;
+
+		return newNode;
+	}
+	else
+	{
+		Node* newNode = new Node;
+		newNode->next = computeSum( a->next, b->next );
+
+		newNode->data = (a->data + b->data + mem) % 10;
+		mem = (a->data + b->data) / 10;
+
+		return newNode;
+	}
+}
+
+LinkedList computeSumRec( LinkedList a, LinkedList b )
+{
+	mem = 0;
+
+	int sizeA, sizeB;
+	sizeA = a.getSize();
+	sizeB = b.getSize();
+
+	Node *rootA, *rootB;
+	
+	rootA = a.getRoot();
+	rootB = b.getRoot();
+
+	if ( sizeA!=sizeB )
+	{
+		if (sizeA>sizeB)
+		{
+			while ( sizeA>sizeB )
+			{
+				Node* temp = new Node;
+				temp->data = 0;
+				temp->next = rootB;
+				rootB = temp;
+				sizeB++;
+			}
+		}
+		else
+		{
+			while ( sizeB>sizeA )
+			{
+				Node* temp = new Node;
+				temp->data = 0;
+				temp->next = rootA;
+				rootA = temp;
+				sizeA++;
+			}
+		}
+	}
+
+	Node* s = computeSum( rootA, rootB );
+	LinkedList sum;
+
+	while (s!=NULL)
+	{
+		sum.appendToTail( s->data );
+		s = s->next;
+	} 
+
+	return sum;
+}
+
+
 // -----------------------------------------------------------------------------
 
 int main()
@@ -240,10 +337,23 @@ int main()
 
 	b.appendToTail(5);
 	b.appendToTail(9);
-	b.appendToTail(5);
+	b.appendToTail(2);
 
 	LinkedList s = computeSum( a, b );
 	s.printList();
+
+	LinkedList a1;
+	LinkedList b1;
+
+	a1.appendToTail(6);
+	a1.appendToTail(1);
+	a1.appendToTail(7);
+
+	b1.appendToTail(9);
+	b1.appendToTail(5);
+
+	LinkedList s1 = computeSumRec( a1, b1 );
+	s1.printList();
 
 	return 0;
 }
