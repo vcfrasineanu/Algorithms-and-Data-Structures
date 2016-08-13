@@ -107,24 +107,58 @@ void Stack::printStack()
 	cout << endl;
 }
 
+Stack sortStack( Stack a )
+{
+	Stack aux;
+
+	while ( a.getSize() > 0 )
+	{
+		int current = a.pop();
+		if ( aux.getSize() == 0 ) aux.push( current );
+		else
+		{
+			int cnt = 0;
+			if (aux.peek() < current)
+			{
+				while ( (aux.peek() < current) && (aux.getSize() != 0) )
+				{
+					a.push(aux.pop());
+					cnt++;
+				}
+			}
+			aux.push(current);
+			while ( cnt>0 )	
+			{
+				aux.push(a.pop());
+				cnt--;
+			}
+		}
+	}
+
+	return aux;
+}
+
 // -----------------------------------------------------------------------------
 
 int main()
 {
 	Stack s;
 	
-	s.push(5);
+	s.push(6);
 	s.printStack();
 
 	s.push(6);
 	s.printStack();
 
-	s.push(7);
-	s.push(8);
+	s.push(5);
 	s.push(9);
-
+	s.push(8);
+	s.push(7);
+	
+	s = sortStack(s);
+	cout << endl;
 	s.printStack();
-
+	cout << endl;
 	s.pop();
 	s.printStack();
 
