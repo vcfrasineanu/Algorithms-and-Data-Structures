@@ -6,6 +6,7 @@
 // -----------------------------------------------------------------------------
 
 #include <iostream>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -130,6 +131,29 @@ int BST::getDepth()
 	return getDepthRoot( root );
 }
 
+bool checkBalanced( Node* root )
+{
+	if ( root == NULL ) return true;
+	if ( root->left == NULL )
+	{
+		if ( root->right == NULL ) return true;
+		if ( root->right->right == NULL && root->right->left == NULL ) return true;
+		return false;
+	}
+	if ( root->right == NULL )
+	{
+		if ( root->left == NULL ) return true;
+		if ( root->left->right == NULL && root->left->left == NULL ) return true;
+		return false;
+	}
+
+	if ( abs(getDepthRoot(root->left) - getDepthRoot(root->right)) == 1 || 
+		 abs(getDepthRoot(root->left) - getDepthRoot(root->right)) == 0 )	
+		return checkBalanced( root->left ) && checkBalanced( root->right );
+	else
+		return false;
+}
+
 int main()
 {
 	BST test;
@@ -142,12 +166,15 @@ int main()
     test.addNode(9);
     test.addNode(7);
     test.addNode(13);
-    test.addNode(3);
+    test.addNode(0);
+    //test.addNode(3);
 
    	printInOrder( test.getRoot() );
    	cout << endl;
 
    	cout << test.getDepth() << endl;
+
+   	cout << checkBalanced(test.getRoot()) << endl;
 
 	return 0;
 }
